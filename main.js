@@ -1,5 +1,6 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow, globalShortcut} = require('electron')
+const path = require('path')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -30,6 +31,14 @@ function createWindow () {
 function registerHotkey() {
   const ret = globalShortcut.register('CommandOrControl+Alt+X', () => {
     console.log('CommandOrControl+Alt+X is pressed')
+
+    // 打开设置提醒时间窗口
+    const modalPath = path.join('file://', __dirname, 'setting.html')
+    let win = new BrowserWindow({ width: 400, height: 320 })
+
+    win.on('close', () => { win = null })
+    win.loadURL(modalPath)
+    win.show()
   })
 
   if (!ret) {
