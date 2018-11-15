@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, globalShortcut} = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -15,6 +15,8 @@ function createWindow () {
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 
+  registerHotkey()
+
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
     // Dereference the window object, usually you would store windows
@@ -22,6 +24,20 @@ function createWindow () {
     // when you should delete the corresponding element.
     mainWindow = null
   })
+}
+
+// 注册快捷键
+function registerHotkey() {
+  const ret = globalShortcut.register('CommandOrControl+Alt+X', () => {
+    console.log('CommandOrControl+Alt+X is pressed')
+  })
+
+  if (!ret) {
+    console.log('registration failed')
+  }
+
+  // 检查快捷键是否注册成功
+  console.log("registration" + globalShortcut.isRegistered('CommandOrControl+Alt+X'))
 }
 
 // This method will be called when Electron has finished
@@ -48,3 +64,13 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+app.on('will-quit', () => {
+  console.log("unregister hotkey")
+
+  // 注销快捷键
+  globalShortcut.unregister('CommandOrControl+X')
+
+  // 清空所有快捷键
+  globalShortcut.unregisterAll()
+})
