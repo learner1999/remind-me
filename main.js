@@ -34,11 +34,10 @@ function registerHotkey() {
 
     // 打开设置提醒时间窗口
     const modalPath = path.join('file://', __dirname, 'setting.html')
-    let win = new BrowserWindow({ width: 400, height: 320 })
+    let win = new BrowserWindow({ width: 400, height: 520, show: false })
 
     win.on('close', () => { win = null })
     win.loadURL(modalPath)
-    win.show()
   })
 
   if (!ret) {

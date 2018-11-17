@@ -1,15 +1,55 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <title>设置提醒时间</title>
-  </head>
-  <body>
-    <h1>设置提醒时间</h1>
-    
+    <link rel="stylesheet" href="mdui/css/mdui.min.css">
+    <script src="mdui/js/mdui.min.js"></script>
+</head>
+
+<body>
+    <div class="mdui-card">
+
+        <!-- 卡片的媒体内容，可以包含图片、视频等媒体内容，以及标题、副标题 -->
+        <div class="mdui-card-media">
+            <img id="id-img-screenshot" />
+
+            <!-- 卡片中可以包含一个或多个菜单按钮 -->
+            <div class="mdui-card-menu">
+                <button id="id-btn-full-screen" class="mdui-btn mdui-btn-icon mdui-text-color-white"><i class="mdui-icon material-icons">open_with</i></button>
+            </div>
+        </div>
+
+        <!-- 卡片的标题和副标题 -->
+        <div class="mdui-card-primary">
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">提醒的内容</label>
+                <input class="mdui-textfield-input" type="text" />
+            </div>
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">几分钟后提醒</label>
+                <input class="mdui-textfield-input" type="number" value="10" />
+            </div>
+        </div>
+
+        <!-- 卡片的按钮 -->
+        <div class="mdui-card-actions">
+            <div class="mdui-row-xs-2">
+                <div class="mdui-col">
+                    <button class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple">确定</button>
+                </div>
+                <div class="mdui-col">
+                    <button class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple">取消</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
     <script>
-      // You can also require other files to run in this process
-      require('./setting.js')
+        require('./setting.js')
     </script>
-  </body>
+</body>
+
 </html>
