@@ -22,10 +22,10 @@ function screenshot() {
 
     desktopCapturer.getSources(options, (error, sources) => {
         if (error) return console.log(error)
-        
+
         // 避免截图的时候将当前窗口给截进去，在截图完成之后再显示
         remote.getCurrentWindow().show()
-        
+
         sources.forEach((source) => {
             if (source.name === 'Entire screen' || source.name === 'Screen 1') {
                 screenshotPath = path.join(os.tmpdir(), 'screenshot.png')
