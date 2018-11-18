@@ -7,10 +7,6 @@ const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
 const shortid = require('shortid')
 
-// 数据库
-const adapter = new FileSync('db.json')
-const db = low(adapter)
-
 // 截图显示
 let imgScreenshot = document.getElementById('id-img-screenshot')
 
@@ -80,6 +76,10 @@ btnFullScreen.addEventListener('click', function (event) {
 })
 
 btnComfirm.addEventListener('click', function (event) {
+
+    // 放在外面定义成常量，在多个渲染进程进行访问的时候有点问题，挪到里面定义成变量使用
+    let adapter = new FileSync('db.json')
+    let db = low(adapter)
 
     // 几分钟后提醒
     let minute = document.getElementById('id-input-time').value
