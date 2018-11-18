@@ -3,6 +3,13 @@ const fs = require('fs')
 const os = require('os')
 const path = require('path')
 const remote = require('electron').remote
+const low = require('lowdb')
+const FileSync = require('lowdb/adapters/FileSync')
+const shortid = require('shortid')
+
+// 数据库
+const adapter = new FileSync('db.json')
+const db = low(adapter)
 
 // 截图显示
 let imgScreenshot = document.getElementById('id-img-screenshot')
@@ -74,6 +81,26 @@ btnFullScreen.addEventListener('click', function (event) {
 
 btnComfirm.addEventListener('click', function (event) {
 
+    // 几分钟后提醒
+    let minute = document.getElementById('id-input-time').value
+    let curTime = new Date().getTime()
+    let remindTime = curTime + minute * 1000;
+
+    // 初始化数据库
+    db.defaults({ records: [] })
+        .write()
+
+    // 向数据库添加一条记录
+    db.get('records')
+        .push({
+            // 主键 ID
+            id: shortid.generate(),
+            // 描述
+            desc: document.getElementById('id-input-desc').value,
+            // 提醒的时间
+            time: remindTime,
+        })
+        .write()
 })
 
 btnCancel.addEventListener('click', function (event) {
