@@ -101,6 +101,8 @@ btnComfirm.addEventListener('click', function (event) {
             time: remindTime,
         })
         .write()
+
+    curWin.close()
 })
 
 btnCancel.addEventListener('click', function (event) {
