@@ -84,7 +84,7 @@ btnComfirm.addEventListener('click', function (event) {
     // 几分钟后提醒
     let minute = document.getElementById('id-input-time').value
     let curTime = new Date().getTime()
-    let remindTime = curTime + minute * 1000;
+    let remindTime = curTime + minute * 60 * 1000
 
     // 初始化数据库
     db.defaults({ records: [] })
