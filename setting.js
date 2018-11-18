@@ -95,6 +95,8 @@ btnComfirm.addEventListener('click', function (event) {
         .push({
             // 主键 ID
             id: shortid.generate(),
+            // 截图文件路径
+            screenshotPath: screenshotPath,
             // 描述
             desc: document.getElementById('id-input-desc').value,
             // 提醒的时间
