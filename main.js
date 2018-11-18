@@ -8,7 +8,7 @@ let mainWindow
 
 function createWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({ width: 800, height: 600 })
+  mainWindow = new BrowserWindow({ width: 800, height: 600, show: false })
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
@@ -25,27 +25,6 @@ function createWindow() {
     // when you should delete the corresponding element.
     mainWindow = null
   })
-}
-
-// 注册快捷键
-function registerHotkey() {
-  const ret = globalShortcut.register('CommandOrControl+Alt+X', () => {
-    console.log('CommandOrControl+Alt+X is pressed')
-
-    // 打开设置提醒时间窗口
-    const modalPath = path.join('file://', __dirname, 'setting.html')
-    let win = new BrowserWindow({ width: 400, height: 520, show: false })
-
-    win.on('close', () => { win = null })
-    win.loadURL(modalPath)
-  })
-
-  if (!ret) {
-    console.log('registration failed')
-  }
-
-  // 检查快捷键是否注册成功
-  console.log("registration" + globalShortcut.isRegistered('CommandOrControl+Alt+X'))
 }
 
 // This method will be called when Electron has finished
@@ -82,3 +61,24 @@ app.on('will-quit', () => {
   // 清空所有快捷键
   globalShortcut.unregisterAll()
 })
+
+// 注册快捷键
+function registerHotkey() {
+  const ret = globalShortcut.register('CommandOrControl+Alt+X', () => {
+    console.log('CommandOrControl+Alt+X is pressed')
+
+    // 打开设置提醒时间窗口
+    const modalPath = path.join('file://', __dirname, 'setting.html')
+    let win = new BrowserWindow({ width: 400, height: 520, show: false })
+
+    win.on('close', () => { win = null })
+    win.loadURL(modalPath)
+  })
+
+  if (!ret) {
+    console.log('registration failed')
+  }
+
+  // 检查快捷键是否注册成功
+  console.log("registration" + globalShortcut.isRegistered('CommandOrControl+Alt+X'))
+}
