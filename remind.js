@@ -6,6 +6,7 @@ const remote = require('electron').remote
 const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
 const shortid = require('shortid')
+const ipcRenderer = require('electron').ipcRenderer
 
 // 截图显示
 let imgScreenshot = document.getElementById('id-img-screenshot')
@@ -19,54 +20,17 @@ let btnComfirm = document.getElementById('id-btn-comfirm')
 // 取消按钮
 let btnCancel = document.getElementById('id-btn-cancel')
 
+// 描述文本框
+let inputDesc = document.getElementById('id-input-desc')
+
+// 描述区域 div
+let divDesc = document.getElementById('id-div-desc')
+
 // 屏幕截图保存地址
 let screenshotPath = ""
 
 // 当前窗口
 let curWin = remote.getCurrentWindow()
-
-// 显示截图通知
-let notificationScreenshot = new Notification('remind-me', {
-    body: '正在截屏……'
-})
-
-// 截取屏幕
-screenshot()
-
-// 截取屏幕
-function screenshot() {
-    const thumbSize = determineScreenShotSize()
-    let options = { types: ['screen'], thumbnailSize: thumbSize }
-
-    desktopCapturer.getSources(options, (error, sources) => {
-        if (error) return console.log(error)
-
-        // 避免截图的时候将当前窗口给截进去，在截图完成之后再显示
-        curWin.show()
-        notificationScreenshot.close()
-
-        sources.forEach((source) => {
-            if (source.name === 'Entire screen' || source.name === 'Screen 1') {
-                screenshotPath = path.join(os.tmpdir(), 'screenshot.png')
-
-                fs.writeFile(screenshotPath, source.thumbnail.toPNG(), (error) => {
-                    if (error) return console.log(error)
-                    imgScreenshot.src = screenshotPath
-                })
-            }
-        })
-    })
-}
-
-// 获取屏幕尺寸
-function determineScreenShotSize() {
-    const screenSize = screen.getPrimaryDisplay().workAreaSize
-    const maxDimension = Math.max(screenSize.width, screenSize.height)
-    return {
-        width: maxDimension * window.devicePixelRatio,
-        height: maxDimension * window.devicePixelRatio
-    }
-}
 
 btnFullScreen.addEventListener('click', function (event) {
     if (screenshotPath === "") {
@@ -98,7 +62,7 @@ btnComfirm.addEventListener('click', function (event) {
             // 截图文件路径
             screenshotPath: screenshotPath,
             // 描述
-            desc: document.getElementById('id-input-desc').value,
+            desc: inputDesc.value,
             // 提醒的时间
             time: remindTime,
         })
@@ -109,4 +73,16 @@ btnComfirm.addEventListener('click', function (event) {
 
 btnCancel.addEventListener('click', function (event) {
     curWin.close()
+})
+
+ipcRenderer.on('input-received', function (event, data) {
+    console.log(data)
+
+    // 显示对应的截图
+    screenshotPath = data.record.screenshotPath
+    imgScreenshot.src = screenshotPath
+
+    // 显示对应描述
+    inputDesc.value = data.record.desc
+    divDesc.classList.add('mdui-textfield-not-empty')
 })

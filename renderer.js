@@ -23,6 +23,17 @@ function startCheckRecord() {
                 let win = new BrowserWindow({ width: 400, height: 520 })
                 win.on('close', () => { win = null })
                 win.loadURL(modalPath)
+                win.webContents.once('dom-ready', () => {
+                    let data = {
+                        record: {
+                            // 截图文件路径
+                            screenshotPath: record.screenshotPath,
+                            // 描述
+                            desc: record.desc,
+                        }
+                    }
+                    win.webContents.send('input-received', data)
+                })
 
                 // 删除记录
                 db.get('records').remove({ id: record.id }).write()
