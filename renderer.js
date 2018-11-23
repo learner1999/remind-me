@@ -1,5 +1,7 @@
 const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
+const { BrowserWindow } = require('electron').remote
+const path = require('path')
 
 startCheckRecord()
 
@@ -16,10 +18,11 @@ function startCheckRecord() {
         records.forEach(record => {
             console.log('record.time#' + record.time + ', new Date().getTime()#' + new Date().getTime())
             if (record.time < new Date().getTime()) {
-                // 提醒用户
-                new Notification('remind-me', {
-                    body: record.desc
-                })
+                // 弹个界面出来提醒用户
+                const modalPath = path.join('file://', __dirname, 'remind.html')
+                let win = new BrowserWindow({ width: 400, height: 520 })
+                win.on('close', () => { win = null })
+                win.loadURL(modalPath)
 
                 // 删除记录
                 db.get('records').remove({ id: record.id }).write()
